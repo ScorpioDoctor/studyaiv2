@@ -10,7 +10,7 @@
       </Menu>
     </template>
     <template slot="content">
-      <Divider>您选择的算法检索到的所有相关文章共计： 100 篇</Divider>
+      <router-view></router-view>
     </template>
   </main-container>
 </template>
@@ -20,10 +20,11 @@
 import { getSecondCategories } from '../../api/api'
 
 export default {
-  name: 'jqsj',
+  name: 'jqxx',
   data () {
     return {
       isCollapsed: true,
+      category1Id: 17,
       categories2: [],
       activeCat2Name: -1
     }
@@ -46,11 +47,13 @@ export default {
       })
     },
     handleSelect (name) {
-      console.log(name)
+      this.$router.push({ name: name })
     }
   },
   created () {
-    this.obtainCategories2(18)
+    this.category1Id = this.$route.params.cat1id
+    console.log(this.category1Id)
+    this.obtainCategories2(this.category1Id)
   }
 }
 </script>

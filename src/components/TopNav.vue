@@ -40,7 +40,7 @@
                   <DropdownItem>我的收藏</DropdownItem>
                   <DropdownItem>设置<Badge status="error" /></DropdownItem>
                   <router-link to="/login"><DropdownItem divided>立即登录</DropdownItem></router-link>
-                  <router-link to="/logout"><DropdownItem>退出登录</DropdownItem></router-link>
+                  <DropdownItem><span @click="loginOut()">退出登录</span></DropdownItem>
                   <router-link to="/regist"><DropdownItem>立即注册</DropdownItem></router-link>
                 </DropdownMenu>
               </Dropdown>
@@ -93,17 +93,30 @@
 </template>
 
 <script>
-    export default {
-      name: 'top-nav',
-      data () {
-        return {
-          activeName: this.$route.path,
-          count: 5,
-          openTheme: false,
-          isCollapsed: false
-        }
-      }
+import cookie from '../store/cookie'
+
+export default {
+  name: 'top-nav',
+  data () {
+    return {
+      activeName: this.$route.path,
+      count: 5,
+      openTheme: false,
+      isCollapsed: false
     }
+  },
+  methods: {
+    loginOut () {
+      cookie.delCookie('token')
+      cookie.delCookie('username')
+      cookie.delCookie('userid')
+      // 存储,更新 store
+      this.$store.dispatch('setInfo')
+      // 跳转到登录
+      this.$router.push({ name: 'login' })
+    }
+  }
+}
 </script>
 
 <style scoped>

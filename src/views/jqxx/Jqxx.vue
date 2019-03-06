@@ -1,61 +1,59 @@
 <template>
   <main-container :is-collpased="isCollapsed">
     <template slot="sidebar">
-      <Menu active-name="1-1" theme="dark" width="auto" class="sider-menu" :class="menuitemClasses">
-        <MenuItem name="1-1">
+      <Menu :active-name="activeCat2Name" theme="dark" width="auto" class="sider-menu" :class="menuitemClasses"
+      @on-select="handleSelect">
+        <MenuItem v-for="cat2 in categories2" :key="cat2.id" :name="cat2.name">
           <Icon type="ios-navigate"></Icon>
-          <span>基础理论</span>
-        </MenuItem>
-        <MenuItem name="1-2">
-          <Icon type="ios-analytics-outline"/>
-          <span>研究前沿</span>
-        </MenuItem>
-        <MenuItem name="1-3">
-          <Icon type="ios-search"></Icon>
-          <span>OpenCV</span>
-        </MenuItem>
-        <MenuItem name="1-4">
-          <Icon type="ios-settings"></Icon>
-          <span>Matlab</span>
-        </MenuItem>
-        <MenuItem name="1-5">
-          <Icon type="ios-analytics-outline"/>
-          <span>SKImage</span>
-        </MenuItem>
-        <MenuItem name="1-6">
-          <Icon type="ios-analytics-outline"/>
-          <span>PyTorch</span>
-        </MenuItem>
-        <MenuItem name="1-7">
-          <Icon type="ios-analytics-outline"/>
-          <span>TensorFlow</span>
+          <span>{{cat2.name}}</span>
         </MenuItem>
       </Menu>
     </template>
     <template slot="content">
-      <Divider>您选择的算法检索到的所有相关文章共计： 100 篇</Divider>
+      <router-view></router-view>
     </template>
   </main-container>
 </template>
 
 <script>
 
-  export default {
-    name: 'jqxx',
-    data() {
-      return {
-        isCollapsed: true,
-      }
+import { getSecondCategories } from '../../api/api'
+
+export default {
+  name: 'jqxx',
+  data () {
+    return {
+      isCollapsed: true,
+      categories2: [],
+      activeCat2Name: -1
+    }
+  },
+  computed: {
+    menuitemClasses: function () {
+      return [
+        'menu-item', this.isCollapsed ? 'collapsed-menu' : ''
+      ]
+    }
+  },
+  methods: {
+    obtainCategories2 (parentId) {
+      getSecondCategories({ params: { parent: parentId } }).then(
+        (response) => {
+          this.categories2 = response.data
+        }
+      ).catch((error) => {
+        console.log(error)
+      })
     },
-    computed: {
-      menuitemClasses: function () {
-        return [
-          'menu-item', this.isCollapsed ? 'collapsed-menu' : ''
-        ]
-      }
-    },
-    methods: {}
+    handleSelect (name) {
+      console.log(name)
+      this.$router.push({ name: name })
+    }
+  },
+  created () {
+    this.obtainCategories2(17)
   }
+}
 </script>
 
 <style scoped>

@@ -5,33 +5,72 @@
         <div style="height: 1px;width: 100%"></div>
       </i-col>
       <i-col :span="18">
-        <Card>
-          <h2>{{album.name}}</h2>
+        <Card style="height: 152px">
+          <Row>
+            <i-col :span="4"><img :src="album.cover" height="120px"/></i-col>
+            <i-col :span="12">
+              <h2>【专辑：{{album.name}}】</h2>
+              <div style="margin-top: 8px;">
+                <span><Icon type="ios-hand" size="20"/>: {{album.click_num}}</span> ·
+                <span><Icon type="ios-eye" size="24"/>: {{album.focus_num}} </span> ·
+                <span><Icon type="ios-heart" size="20"/>: 100 </span> ·
+                <span>作者：{{album.user.username}}</span>
+              </div>
+              <div style="margin-top: 8px;">
+                <p>{{album.brief}}</p>
+              </div>
+            </i-col>
+            <i-col :span="8">
+
+            </i-col>
+          </Row>
         </Card>
       </i-col>
       <i-col :span="3">
         <div style="height: 1px;width: 100%"></div>
       </i-col>
     </Row>
+    <Row style="margin-top: 8px">
+      <Tabs>
+        <TabPane label="该专辑的文章列表" icon="logo-apple">
+          <article-list :articles="articles.results"></article-list>
+        </TabPane>
+        <TabPane label="该专辑的评论列表" icon="logo-windows">标签二的内容</TabPane>
+        <TabPane label="该作者的其他专辑" icon="logo-tux">标签三的内容</TabPane>
+      </Tabs>
+    </Row>
   </div>
 </template>
 
 <script>
-import { getAlbums } from '../../api/api'
+import { getAlbums, getArticles } from '../../api/api'
+import ArticleList from "../../components/ArticleList";
 
 export default {
+  components: {ArticleList},
   name: 'AlbumDetail',
   data () {
     return {
-      album: Object
+      album: Object,
+      articles: []
     }
   },
   methods: {
     obtainAlbum (albumId) {
       getAlbums({ id: albumId }).then(
         (response) => {
-          console.log(response.data)
+          // console.log(response.data)
           this.album = response.data
+        }
+      ).catch((error) => {
+        console.log(error)
+      })
+    },
+    obtainArticles (albumId) {
+      getArticles({ params: { album: albumId } }).then(
+        (response) => {
+          console.log(response.data)
+          this.articles = response.data
         }
       ).catch((error) => {
         console.log(error)
@@ -41,6 +80,7 @@ export default {
   created () {
     var albumId = this.$route.params.id
     this.obtainAlbum(albumId)
+    this.obtainArticles(albumId)
   }
 }
 </script>

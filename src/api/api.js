@@ -38,11 +38,20 @@ export const getTags = params => {
   }
 }
 
-// 获取专辑列表
+// 获取专辑列表或专辑详情
 export const getAlbums = params => {
   if ('id' in params) {
     return axios.get(`${host}/albums/` + params.id + '/')
   } else {
     return axios.get(`${host}/albums/`, params)
+  }
+}
+
+// 获取文章列表或文章详情
+export const getArticles = params => {
+  if ('id' in params) {
+    return axios.get(`${host}/articles/` + params.id + '/')
+  } else {
+    return axios.get(`${host}/articles/`, params)
   }
 }

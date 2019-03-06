@@ -24,23 +24,17 @@
         <i-col :xs="4" :sm ="4">
           <Row>
             <i-col span="6">
-              <Dropdown>
-                <Button type="success">创作</Button>
-                <DropdownMenu slot="list">
-                  <router-link to="/blog/create"><DropdownItem>写博客</DropdownItem></router-link>
-                  <DropdownItem>提问题</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </i-col>
-            <i-col span="6">
               <Dropdown transfer>
                 <Avatar src="https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar"></Avatar>
                 <DropdownMenu slot="list" transfer>
-                  <DropdownItem>我的主页</DropdownItem>
-                  <DropdownItem>我的收藏</DropdownItem>
-                  <DropdownItem>设置<Badge status="error" /></DropdownItem>
-                  <router-link to="/login"><DropdownItem divided>立即登录</DropdownItem></router-link>
+                  <router-link to="/usercenter">
+                    <DropdownItem><Icon type="ios-home-outline" />我的主页</DropdownItem>
+                  </router-link>
+                  <router-link to="/create"><DropdownItem>
+                    <Icon type="ios-create-outline" />写博客</DropdownItem>
+                  </router-link>
                   <DropdownItem><span @click="loginOut()">退出登录</span></DropdownItem>
+                  <router-link to="/login"><DropdownItem divided>立即登录</DropdownItem></router-link>
                   <router-link to="/regist"><DropdownItem>立即注册</DropdownItem></router-link>
                 </DropdownMenu>
               </Dropdown>
@@ -110,6 +104,7 @@ export default {
       cookie.delCookie('token')
       cookie.delCookie('username')
       cookie.delCookie('userid')
+      console.log('哈哈哈哈哈哈哈哈')
       // 存储,更新 store
       this.$store.dispatch('setInfo')
       // 跳转到登录

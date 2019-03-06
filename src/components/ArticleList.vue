@@ -3,7 +3,7 @@
     <Card style="margin-bottom: 16px;" v-for="(item,idx) in articles" :key="item.id">
       <p slot="title">
         <Icon type="ios-film-outline"></Icon>
-        <router-link :to="'/blog/read/'+item.id">{{item.title}}</router-link>
+        <span @click="handleSelect(item.category1.id, item.id)">{{item.title}}</span>
       </p>
       <a href="#" slot="extra">
         <Icon type="ios-loop-strong"></Icon>
@@ -17,19 +17,22 @@
 </template>
 
 <script>
-  export default {
-    name: "article-list",
-    props: {'articles': Array},
-    data() {
-      return {
-        count: 0,
-      }
-    },
-    methods: {},
-    created() {
+export default {
+  name: 'article-list',
+  props: { 'articles': Array },
+  data () {
+    return {
+      count: 0
     }
-
+  },
+  methods: {
+    handleSelect (cat1id, id) {
+      this.$router.push({ path: `/blog/` + cat1id + `/article/` + id })
+    }
+  },
+  created () {
   }
+}
 </script>
 
 <style scoped>

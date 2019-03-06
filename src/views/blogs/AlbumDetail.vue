@@ -1,34 +1,28 @@
 <template>
   <div class="main">
     <Row class="infos">
-      <i-col :span="3">
-        <div style="height: 1px;width: 100%"></div>
-      </i-col>
-      <i-col :span="18">
-        <Card style="height: 152px">
-          <Row>
-            <i-col :span="4"><img :src="album.cover" height="120px"/></i-col>
-            <i-col :span="12">
-              <h2>【专辑：{{album.name}}】</h2>
-              <div style="margin-top: 8px;">
-                <span><Icon type="ios-hand" size="20"/>: {{album.click_num}}</span> ·
-                <span><Icon type="ios-eye" size="24"/>: {{album.focus_num}} </span> ·
-                <span><Icon type="ios-heart" size="20"/>: 100 </span> ·
-                <span>作者：{{album.user.username}}</span>
-              </div>
-              <div style="margin-top: 8px;">
-                <p>{{album.brief}}</p>
-              </div>
-            </i-col>
-            <i-col :span="8">
-
-            </i-col>
-          </Row>
-        </Card>
-      </i-col>
-      <i-col :span="3">
-        <div style="height: 1px;width: 100%"></div>
-      </i-col>
+      <Card style="height: 152px">
+        <Row>
+          <i-col :span="4"><img :src="album.cover" height="120px"/></i-col>
+          <i-col :span="16" :offset="1">
+            <h2>【专辑：{{album.name}}】</h2>
+            <div style="margin-top: 8px;">
+              <span><Icon type="ios-hand" size="20"/>: {{album.click_num}}</span> ·
+              <span><Icon type="ios-eye" size="24"/>: {{album.focus_num}} </span> ·
+              <span><Icon type="ios-heart" size="20"/>: 100 </span> ·
+              <span>作者：哈哈哈</span>
+            </div>
+            <div style="margin-top: 8px;">
+              <p>{{album.brief}}</p>
+            </div>
+          </i-col>
+          <i-col :span="3">
+            <Button>关注</Button>
+            <Button>点赞</Button>
+            <Button>分享</Button>
+          </i-col>
+        </Row>
+      </Card>
     </Row>
     <Row style="margin-top: 8px">
       <Tabs>
@@ -44,10 +38,10 @@
 
 <script>
 import { getAlbums, getArticles } from '../../api/api'
-import ArticleList from "../../components/ArticleList";
+import ArticleList from '../../components/ArticleList'
 
 export default {
-  components: {ArticleList},
+  components: { ArticleList },
   name: 'AlbumDetail',
   data () {
     return {

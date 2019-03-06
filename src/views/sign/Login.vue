@@ -71,7 +71,7 @@
 
 <script>
 // @ is an alias to /src
-import { login } from '../../api/api'
+import { getUserDetail, login } from '../../api/api'
 import cookie from '../../store/cookie'
 
 export default {
@@ -121,12 +121,22 @@ export default {
               this.$Message.success('成功登陆!')
               // 本地存储Token信息
               cookie.setCookie('token', response.data.token, 7)
-              cookie.setCookie('username', loginInfo, 7)
-              // cookie.setCookie('userid', res.data.id, 7)
+              // cookie.setCookie('username', loginInfo, 7)
               // 存储,更新 store
               this.$store.dispatch('setInfo')
-              // 跳转到首页页面
-              this.$router.push({ name: 'home' })
+              getUserDetail({ username: 'abc' }).then(
+                (res) => {
+                  // console.log(res.data)
+                  cookie.setCookie('username', res.data.username, 7)
+                  cookie.setCookie('userid', res.data.id, 7)
+                  // 存储,更新 store
+                  this.$store.dispatch('setInfo')
+                  // 跳转到首页页面
+                  this.$router.push({ name: 'home' })
+                }
+              ).catch((error) => {
+                console.log(error)
+              })
             }
           )
         } else {

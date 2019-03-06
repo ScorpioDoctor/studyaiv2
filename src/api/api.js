@@ -11,6 +11,9 @@ export const getVerifyCode = parmas => { return axios.post(`${host}/codes/`, par
 // 注册
 export const registUser = parmas => { return axios.post(`${host}/regist/`, parmas) }
 
+// 获取当前登录用户的详情
+export const getUserDetail = parmas => { return axios.get(`${host}/users/` + parmas.username + '/') }
+
 // 获取一级分类类别信息
 export const getFirstCategories = params => {
   if ('id' in params) {

@@ -24,6 +24,11 @@ export default new Router({
       component: () => import('./views/sign/Regist.vue')
     },
     {
+      path: '/create',
+      name: 'create',
+      component: () => import('./views/blogs/BlogCreate.vue')
+    },
+    {
       path: '/blog/:cat1id/',
       name: 'blog',
       component: () => import('./views/blogs/BlogLayout.vue'),
@@ -32,6 +37,11 @@ export default new Router({
           path: 'album/:id',
           name: 'album',
           component: () => import('./views/blogs/AlbumDetail.vue')
+        },
+        {
+          path: 'article/:id',
+          name: 'article',
+          component: () => import('./views/blogs/ArticleDetail.vue')
         }
       ]
     },
@@ -63,6 +73,43 @@ export default new Router({
         {
           path: 'r',
           name: 'R语言',
+          component: () => import('./views/home/About.vue')
+        }
+      ]
+    },
+    {
+      path: '/usercenter',
+      name: 'usercenter',
+      component: () => import('./views/usercenter/UserCenter.vue'),
+      children: [
+        {
+          path: 'myinfo',
+          name: '我的信息',
+          component: () => import('./views/usercenter/UserInfo.vue')
+        },
+        {
+          path: 'myalbums',
+          name: '我的专辑',
+          component: () => import('./views/usercenter/UserAlbums.vue')
+        },
+        {
+          path: 'myarticles',
+          name: '我的文章',
+          component: () => import('./views/home/About.vue')
+        },
+        {
+          path: 'myfavors',
+          name: '我的收藏',
+          component: () => import('./views/home/About.vue')
+        },
+        {
+          path: 'myfocus',
+          name: '我的关注',
+          component: () => import('./views/home/About.vue')
+        },
+        {
+          path: 'mymessage',
+          name: '我的消息',
           component: () => import('./views/home/About.vue')
         }
       ]

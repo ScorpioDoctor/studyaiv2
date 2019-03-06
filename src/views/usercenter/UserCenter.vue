@@ -20,11 +20,10 @@
 import { getSecondCategories } from '../../api/api'
 
 export default {
-  name: 'jqxx',
+  name: 'UserCenter',
   data () {
     return {
       isCollapsed: true,
-      category1Id: 17,
       categories2: [],
       activeCat2Name: -1
     }
@@ -47,13 +46,12 @@ export default {
       })
     },
     handleSelect (name) {
+      console.log(name)
       this.$router.push({ name: name })
     }
   },
   created () {
-    console.log(this.$route.params)
-    this.category1Id = this.$route.params.cat1id
-    this.obtainCategories2(this.category1Id)
+    this.obtainCategories2(25)
   }
 }
 </script>

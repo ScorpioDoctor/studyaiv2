@@ -95,7 +95,7 @@ export default new Router({
         {
           path: 'myarticles',
           name: '我的文章',
-          component: () => import('./views/home/About.vue')
+          component: () => import('./views/usercenter/UserArticles.vue')
         },
         {
           path: 'myfavors',

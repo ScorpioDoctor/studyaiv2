@@ -1,6 +1,60 @@
 <template>
   <div>
     <Card>
+      <Row>
+        <i-col :span="3">
+          <Button v-if="!isCreate" @click="isCreate=true">新建专辑</Button>
+          <Button v-if="isCreate" @click="isCreate=false">取消新建</Button>
+        </i-col>
+        <i-col :span="10" v-if="isCreate">
+          <Form :model="formItem" :label-width="80">
+            <FormItem label="专辑名称">
+              <Input v-model="formItem.input" placeholder="Enter something..."></Input>
+            </FormItem>
+            <Row>
+              <i-col :span="8">
+                <FormItem label="一级类目">
+                  <Select v-model="formItem.select1">
+                    <Option value="beijing">New York</Option>
+                    <Option value="shanghai">London</Option>
+                    <Option value="shenzhen">Sydney</Option>
+                  </Select>
+                </FormItem>
+              </i-col>
+              <i-col :span="8">
+                <FormItem label="二级类目">
+                  <Select v-model="formItem.select2">
+                    <Option value="beijing">New York</Option>
+                    <Option value="shanghai">London</Option>
+                    <Option value="shenzhen">Sydney</Option>
+                  </Select>
+                </FormItem>
+              </i-col>
+            </Row>
+            <FormItem label="公开/私有">
+              <i-switch v-model="formItem.switch" size="large">
+                <span slot="open">On</span>
+                <span slot="close">Off</span>
+              </i-switch>
+            </FormItem>
+            <FormItem label="专辑简介">
+              <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary">Submit</Button>
+              <Button style="margin-left: 8px">Cancel</Button>
+            </FormItem>
+          </Form>
+        </i-col>
+        <i-col :span="11">
+          <div style="width: 100%; height: 1px"></div>
+        </i-col>
+      </Row>
+    </Card>
+    <Card style="margin-top: 8px">
+      <Row>
+        <h5>您当前总共有专辑 {{totalCount}} 个， 以下表格每页展示 {{albums.length}} 个, 共有 {{totalCount/albums.length}} 页 </h5>
+      </Row>
       <Table border :columns="columns" :data="albums">
         <template slot-scope="{ row, index }" slot="name">
           <Input type="text" v-model="editName" v-if="editIndex === index" />
@@ -28,6 +82,14 @@ export default {
   name: 'UserAlbums',
   data () {
     return {
+      isCreate: false,
+      formItem: {
+        input: '',
+        select1: '',
+        select2: '',
+        switch: true,
+        textarea: ''
+      },
       columns: [
         {
           title: '编号',
@@ -55,6 +117,31 @@ export default {
             return h('div', [
               h('span', params.row.category1.name)
             ])
+          },
+          filters: [
+            {
+              label: '机器学习',
+              value: '机器学习'
+            },
+            {
+              label: '机器视觉',
+              value: '机器视觉'
+            },
+            {
+              label: '量化交易',
+              value: '量化交易'
+            },
+            {
+              label: '大数据',
+              value: '大数据'
+            },
+            {
+              label: '自然语言',
+              value: '自然语言'
+            }
+          ],
+          filterMethod (value, row) {
+            return row.category1.name.indexOf(value) > -1;
           }
         },
         {
@@ -76,6 +163,7 @@ export default {
         }
       ],
       albums: [ ],
+      totalCount: 0,
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: '' // 第一列输入框，当前聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
     }
@@ -85,7 +173,8 @@ export default {
       getAlbums({ params: queryParams }).then(
         (response) => {
           this.albums = response.data.results
-          console.log(response.data)
+          this.totalCount = response.data.count
+          // console.log(response.data)
         }
       ).catch((error) => {
         console.log(error)

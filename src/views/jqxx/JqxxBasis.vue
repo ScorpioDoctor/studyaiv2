@@ -82,14 +82,14 @@ export default {
   watch: {
     orderingType: function (val) {
       var ordering = val + this.orderingName
-      this.obtainAlbums({ category1: 17, category2: 42, ordering: ordering, search: this.search })
+      this.obtainAlbums({ category1: 1, category2: 1, ordering: ordering, search: this.search })
     },
     search: function (val) {
-      this.obtainAlbums({ category1: 17, category2: 42, ordering: this.ordering, search: val })
+      this.obtainAlbums({ category1: 1, category2: 1, ordering: this.ordering, search: val })
     }
   },
   created () {
-    this.obtainAlbums({ category1: 17, category2: 42, ordering: this.ordering, search: this.search })
+    this.obtainAlbums({ category1: 1, category2: 1, ordering: this.ordering, search: this.search })
   }
 }
 </script>

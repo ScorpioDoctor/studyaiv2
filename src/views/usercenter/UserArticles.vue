@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import {getAlbums, getArticles, getFirstCategories, getSecondCategories} from '../../api/api'
+import { getAlbums, getArticles, getFirstCategories, getSecondCategories } from '../../api/api'
 import cookie from '../../store/cookie'
 
 export default {
@@ -118,7 +118,7 @@ export default {
             }
           ],
           filterMethod (value, row) {
-            return row.category1.name.indexOf(value) > -1;
+            return row.category1.name.indexOf(value) > -1
           }
         },
         {
@@ -145,8 +145,8 @@ export default {
       editIndex: -1, // 当前聚焦的输入框的行数
       editTitle: '', // 第一列输入框，当前聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
       albums: [],
-      categories1:[],
-      categories2:[],
+      categories1: [],
+      categories2: [],
       album: '',
       cat1: '',
       cat2: '',
@@ -205,7 +205,7 @@ export default {
       // this.data[index].age = this.editAge;
       // this.data[index].birthday = this.editBirthday;
       // this.data[index].address = this.editAddress;
-      this.editIndex = -1;
+      this.editIndex = -1
     },
     handleAlbumSelect () {
       this.obtainArticles({ user: this.userid, album: this.album, category1: this.cat1, category2: this.cat2 })

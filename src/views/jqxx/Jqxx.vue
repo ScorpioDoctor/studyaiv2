@@ -51,7 +51,7 @@ export default {
     }
   },
   created () {
-    this.obtainCategories2(17)
+    this.obtainCategories2(1)
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card>
-      <Row>
+      <Row :gutter="32">
         <i-col :span="3">
           <Button v-if="!isCreate" @click="isCreate=true">新建专辑</Button>
           <Button v-if="isCreate" @click="isCreate=false">取消新建</Button>
@@ -42,6 +42,12 @@
               <Input v-model="formValidate.brief" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
                      placeholder="请输入20--120字内的专辑简介..."/>
             </FormItem>
+            <FormItem label="专辑封面" prop="cover">
+              <Upload :before-upload="handleBeforeUpload" action="/">
+                <Button icon="ios-cloud-upload-outline">为专辑选择封面图像</Button>
+              </Upload>
+              <p v-if="formValidate.cover !== null">上传的文件名: {{ formValidate.cover.name }}</p>
+            </FormItem>
             <FormItem>
               <Button type="primary" @click="handleSubmit('formValidate')">立即新建</Button>
               <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置表单</Button>
@@ -49,7 +55,7 @@
           </Form>
         </i-col>
         <i-col :span="11">
-          <div style="width: 100%; height: 1px"></div>
+          <div style="width: 100%;height: 1px"></div>
         </i-col>
       </Row>
     </Card>
@@ -77,7 +83,7 @@
 </template>
 
 <script>
-import { getAlbums, getFirstCategories, getSecondCategories, getTags } from '../../api/api'
+import { getAlbums, createAlbum, getFirstCategories, getSecondCategories, getTags } from '../../api/api'
 import cookie from '../../store/cookie'
 
 export default {
@@ -89,8 +95,9 @@ export default {
         name: '',
         category1: '',
         category2: '',
-        tags: '',
+        tags: [],
         isprivate: false,
+        cover: null,
         brief: ''
       },
       ruleValidate: {
@@ -98,13 +105,13 @@ export default {
           { required: true, message: '专辑名称不能为空', trigger: 'blur' }
         ],
         category1: [
-          { required: true, message: '专辑的一级分类是必填的', trigger: 'change' }
+          {type: 'number', required: true, message: '专辑的一级分类是必填的', trigger: 'blur' }
         ],
         category2: [
-          { required: true, message: '专辑的二级分类是必填的', trigger: 'change' }
+          {type: 'number', required: true, message: '专辑的二级分类是必填的', trigger: 'blur' }
         ],
         tags: [
-          { required: true, message: '专辑的分类标签是必填的', trigger: 'change' }
+          {type: 'array', required: true, message: '专辑的分类标签是必填的', trigger: 'blur' }
         ],
         brief: [
           { required: true, message: '专辑的简介是必填的', trigger: 'blur' },
@@ -248,10 +255,38 @@ export default {
     handleObtainCats2 () {
       this.obtainCategories2({ parent: this.formValidate.category1 })
     },
+    handleBeforeUpload (file) {
+      console.log(file)
+      this.formValidate.cover = file;
+      console.log(this.formValidate.cover)
+      return false;
+    },
     handleSubmit (name) {
+      let userid = cookie.getCookie('userid')
+      if (userid === '') {
+        this.$Message.error('没有登录')
+        return
+      }
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('Success!')
+          let formData = new FormData();
+          formData.append('user', userid)
+          formData.append('name', this.formValidate.name)
+          formData.append('brief', this.formValidate.brief)
+          formData.append('category1', this.formValidate.category1)
+          formData.append('category2', this.formValidate.category2)
+          formData.append('cover', this.formValidate.cover)
+          let values = this.formValidate.tags
+          console.log([values[0].toString(), values[1].toString(), values[2].toString()])
+          formData.append('tags', [values[0].toString(), values[1].toString(), values[2].toString()])
+          createAlbum(formData).then(
+            (response) => {
+              this.$Message.success('Success!')
+              console.log(response.data)
+            }
+          ).catch((error) => {
+            console.log(error)
+          })
         } else {
           this.$Message.error('Fail!')
         }

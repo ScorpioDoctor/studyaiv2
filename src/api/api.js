@@ -50,6 +50,11 @@ export const getAlbums = params => {
   }
 }
 
+// 创建 Album
+export const createAlbum = params => { return axios.post(`${host}/albumcreate/`, params, {headers:{ 'Content-Type': 'multipart/form-data' }})}
+// export const createAlbum = params => { return axios.post(`${host}/albumcreate/`, params) }
+
+
 // 获取文章列表或文章详情
 export const getArticles = params => {
   if ('id' in params) {
@@ -58,3 +63,7 @@ export const getArticles = params => {
     return axios.get(`${host}/articles/`, params)
   }
 }
+
+
+// 创建文章
+export const createArticle = params => { return axios.post(`${host}/creates/`, params) }

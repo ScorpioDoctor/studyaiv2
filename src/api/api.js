@@ -65,5 +65,5 @@ export const getArticles = params => {
 }
 
 
-// 创建文章
-export const createArticle = params => { return axios.post(`${host}/creates/`, params) }
+// 创建 Article
+export const createArticle = params => { return axios.post(`${host}/articlecreate/`, params, {headers:{ 'Content-Type': 'multipart/form-data' }})}

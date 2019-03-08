@@ -32,12 +32,6 @@
                 <Option v-for="item in tags" :key="item.id" :value="item.id">{{item.name}}</Option>
               </Select>
             </FormItem>
-            <FormItem label="公开/私有" prop="isprivate">
-              <i-switch v-model="formValidate.isprivate" size="large">
-                <span slot="open">On</span>
-                <span slot="close">Off</span>
-              </i-switch>
-            </FormItem>
             <FormItem label="专辑简介" prop="brief">
               <Input v-model="formValidate.brief" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
                      placeholder="请输入20--120字内的专辑简介..."/>
@@ -96,7 +90,6 @@ export default {
         category1: '',
         category2: '',
         tags: [],
-        isprivate: false,
         cover: null,
         brief: ''
       },
@@ -190,13 +183,13 @@ export default {
           slot: 'action'
         }
       ],
-      albums: [ ],
-      tags: [],
       totalCount: 0,
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: '', // 第一列输入框，当前聚焦的输入框的输入内容，与 data 分离避免重构的闪烁,
       categories1: [],
-      categories2: []
+      categories2: [],
+      albums: [ ],
+      tags: [],
     }
   },
   methods: {
@@ -256,9 +249,7 @@ export default {
       this.obtainCategories2({ parent: this.formValidate.category1 })
     },
     handleBeforeUpload (file) {
-      console.log(file)
       this.formValidate.cover = file;
-      console.log(this.formValidate.cover)
       return false;
     },
     handleSubmit (name) {
@@ -269,22 +260,21 @@ export default {
       }
       this.$refs[name].validate((valid) => {
         if (valid) {
-          let formData = new FormData();
+          let formData = new FormData()
           formData.append('user', userid)
           formData.append('name', this.formValidate.name)
           formData.append('brief', this.formValidate.brief)
           formData.append('category1', this.formValidate.category1)
           formData.append('category2', this.formValidate.category2)
-          formData.append('cover', this.formValidate.cover)
-          let values = this.formValidate.tags
-          console.log([values[0].toString(), values[1].toString(), values[2].toString()])
-          formData.append('tags', [values[0].toString(), values[1].toString(), values[2].toString()])
-          createAlbum(formData).then(
-            (response) => {
+          formData.append('cover', this.formValidate.cover) // 封面文件
+          // tags 列表[1,2,3]会被立刻转换成字符串['1,2,3'] ，而后台系统需要的是tags 的 ids 列表
+          // https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/Using_FormData_Objects
+          // formData如何传递数组 https://blog.csdn.net/NAMECZ/article/details/84585709
+          this.formValidate.tags.forEach((item) => { formData.append('tags', item) })
+          createAlbum(formData).then((response) => {
               this.$Message.success('Success!')
               console.log(response.data)
-            }
-          ).catch((error) => {
+            }).catch((error) => {
             console.log(error)
           })
         } else {

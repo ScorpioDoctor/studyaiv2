@@ -30,8 +30,8 @@
                   <router-link to="/usercenter">
                     <DropdownItem><Icon type="ios-home-outline" />我的主页</DropdownItem>
                   </router-link>
-                  <router-link to="/create"><DropdownItem>
-                    <Icon type="ios-create-outline" />写博客</DropdownItem>
+                  <router-link to="/create">
+                    <DropdownItem><Icon type="ios-create-outline" />写博客</DropdownItem>
                   </router-link>
                   <DropdownItem><span @click="loginOut()">退出登录</span></DropdownItem>
                   <router-link to="/login"><DropdownItem divided>立即登录</DropdownItem></router-link>
@@ -96,7 +96,8 @@ export default {
       activeName: this.$route.path,
       count: 5,
       openTheme: false,
-      isCollapsed: false
+      isCollapsed: false,
+      isLogin: false
     }
   },
   methods: {
@@ -104,11 +105,17 @@ export default {
       cookie.delCookie('token')
       cookie.delCookie('username')
       cookie.delCookie('userid')
-      console.log('哈哈哈哈哈哈哈哈')
       // 存储,更新 store
       this.$store.dispatch('setInfo')
       // 跳转到登录
       this.$router.push({ name: 'login' })
+    }
+  },
+  created () {
+    if (cookie.getCookie('token')&&cookie.getCookie('userid')) {
+      this.isLogin = true
+    } else {
+      this.isLogin = false
     }
   }
 }

@@ -29,6 +29,11 @@ export default new Router({
       component: () => import('./views/blogs/BlogCreate.vue')
     },
     {
+      path: '/article-update/:article',
+      name: 'articleupdate',
+      component: () => import('./views/blogs/ArticleUpdate.vue')
+    },
+    {
       path: '/blog/:cat1id/',
       name: 'blog',
       component: () => import('./views/blogs/BlogLayout.vue'),

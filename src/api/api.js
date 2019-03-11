@@ -98,7 +98,13 @@ export const getAlbumFavor = albumId => { return axios.get(`${host}/albumfavor/`
 export const addUserMessage = params => { return axios.post(`${host}/usermessage/`, params) }
 
 // 删除消息
-export const delUserMessage = messageId => { return axios.delete(`${host}/usermessage/`+messageId+'/') }
+export const delUserMessage = params => {
+  if ('reciever' in params) {
+    return axios.delete(`${host}/usermessage/`+params.messageId+`/?reciever=${params.reciever}`)
+  } else {
+    return axios.delete(`${host}/usermessage/`+params.messageId+'/')
+  }
+}
 
 // 获取消息列表
-export const getAllUserMessage = () => { return axios.get(`${host}/usermessage/`) }
+export const getUserAllMessage = params => { return axios.get(`${host}/usermessage/`, params) }

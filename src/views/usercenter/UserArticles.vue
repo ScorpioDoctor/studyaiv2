@@ -99,12 +99,10 @@
 </template>
 
 <script>
-  import {getAlbums, getArticles, getFirstCategories, getSecondCategories, getTags} from '../../api/api'
+import {getAlbums, getArticles, getFirstCategories, getSecondCategories, getTags} from '../../api/api'
 import cookie from '../../store/cookie'
-import ArticleInfoEdit from "./ArticleInfoEdit";
 
 export default {
-  components: {ArticleInfoEdit},
   name: 'UserArticles',
   data () {
     return {

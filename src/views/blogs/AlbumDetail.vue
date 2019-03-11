@@ -17,7 +17,8 @@
             </div>
           </i-col>
           <i-col :span="3">
-            <Button>关注</Button>
+            <Button v-if="hasFav" @click="deleteCollect">已收藏</Button>
+            <Button v-else @click="addCollect">收藏</Button>
             <Button>点赞</Button>
             <Button>分享</Button>
           </i-col>
@@ -37,16 +38,19 @@
 </template>
 
 <script>
-import { getAlbums, getArticles } from '../../api/api'
+  import {addAlbumFavor, delAlbumFavor, getAlbumFavor, getAlbums, getArticles} from '../../api/api'
 import ArticleList from '../../components/ArticleList'
+import cookie from "../../store/cookie"
 
 export default {
   components: { ArticleList },
   name: 'AlbumDetail',
   data () {
     return {
+      albumId: -1,
       album: Object,
-      articles: []
+      articles: [],
+      hasFav: false
     }
   },
   methods: {
@@ -69,12 +73,44 @@ export default {
       ).catch((error) => {
         console.log(error)
       })
-    }
+    },
+    hasFavored (albumId) {
+      if (cookie.getCookie('token')) {
+        getAlbumFavor(albumId).then((response)=> {
+          this.hasFav = true
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+    },
+    addCollect () {
+      if (cookie.getCookie('token')) {
+        addAlbumFavor({
+          album: this.albumId
+        }).then((response)=> {
+          this.hasFav = true
+          this.$Message.success('已经成功加入收藏夹')
+        }).catch(function (error) {
+          console.log(error);
+        });
+      } else {
+        this.$Message.success('登陆以后才可以收藏喔')
+      }
+    },
+    deleteCollect () {
+      delAlbumFavor(this.albumId).then((response)=> {
+        this.hasFav = false
+        this.$Message.success('收藏已经取消')
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
   },
   created () {
-    var albumId = this.$route.params.id
-    this.obtainAlbum(albumId)
-    this.obtainArticles(albumId)
+    this.albumId = this.$route.params.id
+    this.obtainAlbum(this.albumId)
+    this.obtainArticles(this.albumId)
+    this.hasFavored(this.albumId)
   }
 }
 </script>

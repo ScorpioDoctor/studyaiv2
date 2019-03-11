@@ -13,7 +13,8 @@
               <span>作者：嘻嘻嘻</span>
             </div>
             <div style="margin-top: 8px;">
-              <Button>收藏</Button>
+              <Button v-if="hasFav" @click="deleteCollect">已收藏</Button>
+              <Button v-else @click="addCollect">收藏</Button>
               <Button>评论</Button>
               <Button>分享</Button>
             </div>
@@ -36,13 +37,16 @@
 </template>
 
 <script>
-import { getArticles } from '../../api/api'
+  import {addFavor, delFavor, getArticles, getFavor} from '../../api/api'
+  import cookie from "../../store/cookie";
 
 export default {
-  name: 'AlbumDetail',
+  name: 'ArticleDetail',
   data () {
     return {
-      article: Object
+      articleId: -1,
+      article: Object,
+      hasFav: false
     }
   },
   methods: {
@@ -55,11 +59,43 @@ export default {
       ).catch((error) => {
         console.log(error)
       })
-    }
+    },
+    hasFavored (articleId) {
+      if (cookie.getCookie('token')) {
+        getFavor(this.articleId).then((response)=> {
+          this.hasFav = true
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+    },
+    addCollect () {
+      if (cookie.getCookie('token')) {
+        addFavor({
+          article: this.articleId
+        }).then((response)=> {
+          this.hasFav = true
+          this.$Message.success('已经成功加入收藏夹')
+        }).catch(function (error) {
+          console.log(error);
+        });
+      } else {
+        this.$Message.success('登陆以后才可以收藏喔')
+      }
+    },
+    deleteCollect () {
+      delFavor(this.articleId).then((response)=> {
+        this.hasFav = false
+        this.$Message.success('收藏已经取消')
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
   },
   created () {
-    var articleId = this.$route.params.id
-    this.obtainArticles(articleId)
+    this.articleId = this.$route.params.id
+    this.obtainArticles(this.articleId)
+    this.hasFavored(this.articleId)
   }
 }
 </script>

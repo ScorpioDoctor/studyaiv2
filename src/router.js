@@ -105,17 +105,12 @@ export default new Router({
         {
           path: 'myfavors',
           name: '我的收藏',
-          component: () => import('./views/home/About.vue')
-        },
-        {
-          path: 'myfocus',
-          name: '我的关注',
-          component: () => import('./views/home/About.vue')
+          component: () => import('./views/usercenter/UserFavors.vue')
         },
         {
           path: 'mymessage',
           name: '我的消息',
-          component: () => import('./views/home/About.vue')
+          component: () => import('./views/usercenter/UserMessage.vue')
         }
       ]
     },
